@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -51,6 +52,31 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(_image);
+    final BarcodeDetector barcodeDetector = FirebaseVision.instance.barcodeDetector();
+    final List<Barcode> barcodes = await barcodeDetector.detectInImage(visionImage);
+    for (Barcode barcode in barcodes) {
+      final Rectangle<int> boundingBox = barcode.boundingBox;
+      final List<Point<int>> cornerPoints = barcode.cornerPoints;
+
+      final String rawValue = barcode.rawValue;
+
+      final BarcodeValueType valueType = barcode.valueType;
+
+      // See API reference for complete list of supported types
+      switch (valueType) {
+        case BarcodeValueType.wifi:
+          final String ssid = barcode.wifi.ssid;
+          final String password = barcode.wifi.password;
+          final BarcodeWiFiEncryptionType type = barcode.wifi.encryptionType;
+          break;
+        case BarcodeValueType.url:
+          final String title = barcode.url.title;
+          final String url = barcode.url.url;
+          break;
+      }
+    }
+
 
     setState(() {
       _image = image;
@@ -72,6 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if(_image != null) {
+    }
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -113,21 +141,32 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
         _image == null
             ? Text('No image selected.')
-            : Image.file(_image),
+            : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.file(_image),
+            ),
           ],
         ),
       ),
       floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-        FloatingActionButton(
-        onPressed: getImage,
-        tooltip: 'Pick Image',
-        child: Icon(Icons.add_a_photo),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FloatingActionButton(
+          onPressed: getImage,
+          tooltip: 'Pick Image',
+          child: Icon(Icons.add_a_photo),
+          ),
         ),
-          FloatingActionButton(
-            onPressed: _incrementCounter,
-            tooltip: 'Increment',
-            child: Icon(Icons.add),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FloatingActionButton(
+              onPressed: _incrementCounter,
+              tooltip: 'Increment',
+              child: Icon(Icons.add),
+            ),
           ),
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
