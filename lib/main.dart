@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
@@ -56,8 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final BarcodeDetector barcodeDetector = FirebaseVision.instance.barcodeDetector();
     final List<Barcode> barcodes = await barcodeDetector.detectInImage(visionImage);
     for (Barcode barcode in barcodes) {
-      final Rectangle<int> boundingBox = barcode.boundingBox;
-      final List<Point<int>> cornerPoints = barcode.cornerPoints;
+      final Rect boundingBox = barcode.boundingBox;
+      final List<Offset> cornerPoints = barcode.cornerPoints;
 
       final String rawValue = barcode.rawValue;
 
@@ -73,6 +74,39 @@ class _MyHomePageState extends State<MyHomePage> {
         case BarcodeValueType.url:
           final String title = barcode.url.title;
           final String url = barcode.url.url;
+          break;
+        case BarcodeValueType.unknown:
+          // TODO: Handle this case.
+          break;
+        case BarcodeValueType.contactInfo:
+          // TODO: Handle this case.
+          break;
+        case BarcodeValueType.email:
+          // TODO: Handle this case.
+          break;
+        case BarcodeValueType.isbn:
+          // TODO: Handle this case.
+          break;
+        case BarcodeValueType.phone:
+          // TODO: Handle this case.
+          break;
+        case BarcodeValueType.product:
+          // TODO: Handle this case.
+          break;
+        case BarcodeValueType.sms:
+          // TODO: Handle this case.
+          break;
+        case BarcodeValueType.text:
+          // TODO: Handle this case.
+          break;
+        case BarcodeValueType.geographicCoordinates:
+          // TODO: Handle this case.
+          break;
+        case BarcodeValueType.calendarEvent:
+          // TODO: Handle this case.
+          break;
+        case BarcodeValueType.driverLicense:
+          // TODO: Handle this case.
           break;
       }
     }
