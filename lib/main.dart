@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
-    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(_image);
+    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(image);
     final BarcodeDetector barcodeDetector = FirebaseVision.instance.barcodeDetector();
     final List<Barcode> barcodes = await barcodeDetector.detectInImage(visionImage);
     for (Barcode barcode in barcodes) {
@@ -65,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
       final BarcodeValueType valueType = barcode.valueType;
 
       // See API reference for complete list of supported types
+      debugPrint(valueType.toString());
       switch (valueType) {
         case BarcodeValueType.wifi:
           final String ssid = barcode.wifi.ssid;
