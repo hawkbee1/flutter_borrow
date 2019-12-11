@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final BarcodeDetector barcodeDetector = FirebaseVision.instance.barcodeDetector();
     final List<Barcode> barcodes = await barcodeDetector.detectInImage(visionImage);
     for (Barcode barcode in barcodes) {
-      final Rect boundingBox = barcode.boundingBox;
-      final List<Offset> cornerPoints = barcode.cornerPoints;
+//      final Rect boundingBox = barcode.boundingBox;
+//      final List<Offset> cornerPoints = barcode.cornerPoints;
 
       final String rawValue = barcode.rawValue;
 
